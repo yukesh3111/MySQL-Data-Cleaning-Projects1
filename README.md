@@ -9,9 +9,6 @@
   - [Stage 3: Handle Null and Blank Values](#stage-3-handle-null-and-blank-values)
   - [Stage 4: Remove Unwanted Columns](#stage-4-remove-unwanted-columns)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
 
 ## Description
 This project involves cleaning a dataset (`layoff.csv`) using MySQL. The data cleaning process includes removing duplicates, standardizing data, handling null and blank values, and removing unwanted columns.
