@@ -51,7 +51,55 @@ The dataset used in this project contains information about layoffs, including c
     DELETE FROM REMOVED_DUPLICATE WHERE ROW_NUM > 1;
     SET SQL_SAFE_UPDATES = 1;
 ### Stage 2: Standardize the Data
+
 1. Standardize `COMPANY` and `LOCATION`:
    ```sql
      UPDATE removed_duplicate SET COMPANY = TRIM(COMPANY);
      UPDATE removed_duplicate SET LOCATION = TRIM(LOCATION);
+
+2. Standardize INDUSTRY and COUNTRY:
+   ```sql
+   UPDATE REMOVED_DUPLICATE SET INDUSTRY = TRIM(INDUSTRY);
+   UPDATE REMOVED_DUPLICATE SET INDUSTRY = 'Crypto' WHERE INDUSTRY LIKE 'CRYPTO%';
+   UPDATE REMOVED_DUPLICATE SET COUNTRY = 'United States' WHERE COUNTRY LIKE 'United States%';
+
+3. Convert DATE to DATE data type:
+   ```sql
+   UPDATE removed_duplicate SET `DATE` = str_to_date(`DATE`,'%m/%d/%Y');
+   ALTER TABLE REMOVED_DUPLICATE MODIFY COLUMN `DATE` DATE;
+
+### Stage 3: Handle Null and Blank Values
+
+1. Convert blank values to null:
+   ```sql
+   UPDATE REMOVED_DUPLICATE SET INDUSTRY = NULL WHERE INDUSTRY = '';
+
+2. Populate missing INDUSTRY values:
+   ```sql
+   UPDATE REMOVED_DUPLICATE T1 JOIN removed_duplicate T2
+   ON T1.company = T2.company SET T1.industry = T2.industry
+   WHERE T1.industry IS NULL AND T2.industry IS NOT NULL;
+
+3. Remove rows with missing TOTAL_LAID_OFF and PERCENTAGE_LAID_OFF:
+   ```sql
+   DELETE FROM removed_duplicate WHERE (total_laid_off IS NULL OR total_laid_off = '')
+   AND (percentage_laid_off IS NULL OR percentage_laid_off = '');
+
+### Stage 4: Remove Unwanted Columns
+
+1. Remove the ROW_NUM column:
+   ```sql
+   ALTER TABLE removed_duplicate DROP column ROW_NUM;
+
+## Usage
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/mysql-data-cleaning.git
+
+2. Navigate to the project directory
+   ```sh
+   cd mysql-data-cleaning
+
+3. Execute the SQL queries in your MySQL environment.
+   
