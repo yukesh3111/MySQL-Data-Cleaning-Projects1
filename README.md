@@ -23,8 +23,8 @@ The dataset used in this project contains information about layoffs, including c
 ### Stage 0: Create a New Duplicate table
 1. Create a new table to avoid modifying the raw dataset directly:
    ```sql
-   CREATE TABLE LAYOFF_STAGE1 LIKE LAYOFFS;
-   INSERT LAYOFF_STAGE1 SELECT * FROM LAYOFFS;
+     CREATE TABLE LAYOFF_STAGE1 LIKE LAYOFFS;
+     INSERT LAYOFF_STAGE1 SELECT * FROM LAYOFFS;
 
 ### Stage 1: Remove Duplicates
 
@@ -50,3 +50,8 @@ The dataset used in this project contains information about layoffs, including c
     SET SQL_SAFE_UPDATES = 0;
     DELETE FROM REMOVED_DUPLICATE WHERE ROW_NUM > 1;
     SET SQL_SAFE_UPDATES = 1;
+### Stage 2: Standardize the Data
+1. Standardize `COMPANY` and `LOCATION`:
+   ```sql
+     UPDATE removed_duplicate SET COMPANY = TRIM(COMPANY);
+     UPDATE removed_duplicate SET LOCATION = TRIM(LOCATION);
