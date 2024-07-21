@@ -38,17 +38,15 @@ The dataset used in this project contains information about layoffs, including c
    
 2. Create a table for duplicates and remove them:
    ```sql
-   CREATE TABLE REMOVED_DUPLICATE (
-  `company` text, `location` text, `industry` text, `total_laid_off` int DEFAULT NULL,
-  `percentage_laid_off` text, `date` text, `stage` text, `country` text, 
-  `funds_raised_millions` int DEFAULT NULL, `ROW_NUM` INT) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-  INSERT REMOVED_DUPLICATE SELECT *, ROW_NUMBER() OVER(
-  PARTITION BY COMPANY, LOCATION, INDUSTRY, TOTAL_LAID_OFF, `DATE`, STAGE, COUNTRY, FUNDS_RAISED_MILLIONS) AS ROW_NUM 
-  FROM LAYOFF_STAGE1;
+     CREATE TABLE REMOVED_DUPLICATE (
+    `company` text, `location` text, `industry` text, `total_laid_off` int DEFAULT NULL,
+    `percentage_laid_off` text, `date` text, `stage` text, `country` text, 
+    `funds_raised_millions` int DEFAULT NULL, `ROW_NUM` INT) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
   
-  SET SQL_SAFE_UPDATES = 0;
-  DELETE FROM REMOVED_DUPLICATE WHERE ROW_NUM > 1;
-  SET SQL_SAFE_UPDATES = 1;
-
-   
+    INSERT REMOVED_DUPLICATE SELECT *, ROW_NUMBER() OVER(
+    PARTITION BY COMPANY, LOCATION, INDUSTRY, TOTAL_LAID_OFF, `DATE`, STAGE, COUNTRY, FUNDS_RAISED_MILLIONS) AS ROW_NUM 
+    FROM LAYOFF_STAGE1;
+    
+    SET SQL_SAFE_UPDATES = 0;
+    DELETE FROM REMOVED_DUPLICATE WHERE ROW_NUM > 1;
+    SET SQL_SAFE_UPDATES = 1;
