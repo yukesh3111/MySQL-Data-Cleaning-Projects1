@@ -1,5 +1,5 @@
 # MySQL Data Cleaning Project
-
+![Project Banner]([path/to/your/image.jpg](https://th.bing.com/th/id/OIP.wsus-_9qxZ6aYYVI8lj5LwHaGB?rs=1&pid=ImgDetMain))
 ## Table of Contents
 - [Description](#description)
 - [Dataset](#dataset)
