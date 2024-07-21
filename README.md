@@ -20,9 +20,22 @@ This project involves cleaning a dataset (`layoff.csv`) using MySQL. The data cl
 The dataset used in this project contains information about layoffs, including columns such as `COMPANY`, `LOCATION`, `INDUSTRY`, `TOTAL_LAID_OFF`, `DATE`, `STAGE`, `COUNTRY`, and `FUNDS_RAISED_MILLIONS`.
 
 ## SQL Queries
-
-### Stage 1: Remove Duplicates
+### Stage 0: Create a New Duplicate table
 1. Create a new table to avoid modifying the raw dataset directly:
    ```sql
    CREATE TABLE LAYOFF_STAGE1 LIKE LAYOFFS;
    INSERT LAYOFF_STAGE1 SELECT * FROM LAYOFFS;
+
+### Stage 1: Remove Duplicates
+
+1. Identify and separate duplicate values:
+   ```sql
+   WITH DUPLICATE_TABLE AS (
+SELECT *, ROW_NUMBER() OVER(
+PARTITION BY COMPANY, LOCATION, INDUSTRY, TOTAL_LAID_OFF, `DATE`, STAGE, COUNTRY, FUNDS_RAISED_MILLIONS
+) AS ROW_NUM FROM LAYOFF_STAGE1)
+SELECT * FROM DUPLICATE_TABLE WHERE ROW_NUM > 1;
+
+
+
+
